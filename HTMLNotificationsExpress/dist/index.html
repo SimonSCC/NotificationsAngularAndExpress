@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <title>MainPage</title>
+</head>
+
+<body>
+    <h1 class="centerText">
+        Server Side Events
+    </h1>
+    <div class="postNotificationDiv">
+        <!-- <form method="POST" id="sendNotificationForm"> -->
+        <input type="text" id="senderEntry" placeholder="Sender" name="Sender" class="postInput">
+        <input type="text" id="messageEntry" placeholder="Message of notification" name="Message" class="postInput"
+            maxlength="50">
+        <input type="text" id="imgUrlEntry" placeholder="ImageUrl" name="ImageUrl" class="postInput">
+        <input type="submit" id="submitNotification" name="submit" value="Send">
+
+        <!-- </form> -->
+    </div>
+    <div id="list" class="notificationDisplay">
+
+    </div>
+
+</body>
+
+</html>
+
+<script type="module" src="js/streamScript.js"></script>
+<script type="module" src="js/SendNotification.js"></script>
+
+
+<!-- action="/sendNotification" -->

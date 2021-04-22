@@ -1,0 +1,61 @@
+<div class="container mt-5">
+
+  <h1>Sign up for list</h1>
+  <form [formGroup]="listForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" class="form-control" placeholder="Name" formControlName="name">
+    </div>
+    <button class="btn-light btn-outline-info mb-2" (click)="updateName()">Auto complete name</button>
+
+
+    <div class=" form-group">
+      <label>Email address</label>
+      <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email"
+        formControlName="email">
+    </div>
+
+
+
+
+
+
+    <!-- The displayed value changes as you update the form control element. -->
+
+
+
+    <button type="submit" class="btn btn-primary" [disabled]="!listForm.valid">Submit</button>
+
+    <p *ngIf="listForm.value.name">
+      Your name: {{listForm.value.name}}
+    </p>
+    <p *ngIf="listForm.value.email">
+      Your email: {{listForm.value.email}}
+    </p>
+
+  </form>
+
+
+  <div>
+    <h6>Members Signed Up:</h6>
+    <ul class="list-unstyled" *ngFor="let notification of notifications">
+      <li>{{notification.name}}</li>
+    </ul>
+  </div>
+
+
+  <!-- 
+    Using one formControl
+    <input type="text" class="form-control" placeholder="Name" [formControl]="name"> -->
+  <!-- 
+    <p *ngIf="name.value">
+      Your name: {{name.value}}
+    </p>
+    <p *ngIf="email.value">
+      Your email: {{email.value}}
+    </p> -->
+  <!-- 
+    <button class="btn-light btn-outline-info mb-2" (click)="updateName()">Auto complete name</button> -->
+
+
+</div>
