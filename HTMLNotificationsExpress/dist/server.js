@@ -32,6 +32,7 @@ app.get("/stream", function (req, res) {
 app.post("/sendNotification", function (req, res) {
     console.log("PostRequest received");
     console.log(req.body.From);
+    var recipient = req.body.Recipient;
     var from = req.body.From;
     var message = req.body.Message;
     var imgurl = req.body.ImgUrl;
@@ -41,10 +42,15 @@ app.post("/sendNotification", function (req, res) {
         message = "NoMessage";
     if (req.body.ImgUrl == null)
         imgurl = "";
-    console.log("\nRetrieved post request " + from + " " + message + " " + imgurl + "\n");
+    console.log("\nRetrieved post request " + "To: " + recipient + " " + from + " " + message + " " + imgurl + "\n");
     var notification = new NotificationObject_js_1.NotificationObject(from, message, imgurl);
     res.setHeader("Content-Type", "text/event-stream");
-    SendNotification(notification);
+    if (recipient == "" || recipient == undefined) {
+        SendNotification(notification);
+    }
+    else {
+        SendNotificationToSpecificStream(notification, recipient);
+    }
     res.send("You've succesfully sent your notification: " + from + ", " + message + ", " + imgurl);
 });
 // start the Express server
@@ -53,7 +59,7 @@ app.listen(port, function () {
     setTimeout(function () { return CurrentActiveStreams(); }, 5000);
 });
 function InitiateStream(res) {
-    var notification = new NotificationObject_js_1.NotificationObject("Simon", "You've succesfully connected to the stream!", "");
+    var notification = new NotificationObject_js_1.NotificationObject("Welcome", "You've succesfully connected to the stream!", "");
     console.log("Created notification\n" + notification.From, notification.NotificationMessage);
     // res.write("event: ping\n");
     // res.write("event: Notification\n")
@@ -76,4 +82,24 @@ function CurrentActiveStreams() {
     //     console.log(res);
     // });
     setTimeout(function () { return CurrentActiveStreams(); }, 10000);
+}
+//Attempt:
+var userResponses = [];
+app.get("/stream/:user", function (req, res) {
+    // res.write.User = userSimon;
+    userResponses.push({ StreamName: req.params.user, response: res });
+    res.setHeader("Content-Type", "text/event-stream");
+    InitiateStream(res);
+});
+function SendNotificationToSpecificStream(notification, streamName) {
+    console.log("SendNotiToSpecific" + streamName);
+    userResponses.forEach(function (object) {
+        // console.log(userResponses);
+        // console.log(res.body.User);
+        // console.log(streamName);
+        if (object.StreamName == streamName) {
+            object.response.write("data: " + JSON.stringify(notification));
+            object.response.write("\n\n");
+        }
+    });
 }

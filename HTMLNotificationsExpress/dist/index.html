@@ -14,19 +14,37 @@
     <h1 class="centerText">
         Server Side Events
     </h1>
-    <div class="postNotificationDiv">
+    <h2>Connect to stream</h2>
+    <div>
+        <input type="text" id="StreamName" placeholder="Streamname">
+        <br>
+        <small>Leave blank for default</small>
+    </div>
+    <br>
+    <button id="initiatestreambtn"">Initiate Stream</button>
+    <h2>Send Notification</h2>
+    <div class=" postNotificationDiv">
         <!-- <form method="POST" id="sendNotificationForm"> -->
+        <input type="text" id="recipientEntry" placeholder="Recipient">
+        <br>
+        <small>Leave blank for default</small>
+        <br>
         <input type="text" id="senderEntry" placeholder="Sender" name="Sender" class="postInput">
+        <br>
         <input type="text" id="messageEntry" placeholder="Message of notification" name="Message" class="postInput"
             maxlength="50">
+        <br>
         <input type="text" id="imgUrlEntry" placeholder="ImageUrl" name="ImageUrl" class="postInput">
+        <br>
         <input type="submit" id="submitNotification" name="submit" value="Send">
 
         <!-- </form> -->
-    </div>
-    <div id="list" class="notificationDisplay">
+        </div>
 
-    </div>
+        <h1 id="connectedStatus">You're not connected</h1>
+        <div id="list" class="notificationDisplay">
+
+        </div>
 
 </body>
 

@@ -1,18 +1,22 @@
 <body oncontextmenu='return false' class='snippet-body'>
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      <div class="container fix">
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown notification-ui show">
+        </button> -->
+        <div class="navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto ">
+            <li class="nav-item">
+              <p class="nav-link"> Connected to '{{ConnectedStreamName}}'' stream</p>
+            </li>
+            <li class=" nav-item dropdown notification-ui show ">
+
               <a class="nav-link dropdown-toggle notification-ui_icon" href="#" id="navbarDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <fa-icon [icon]="faBell"></fa-icon>
-                <span class="unread-notification"></span>
+                <span *ngIf="Notifications.length >= 1" class="unread-notification"></span>
               </a>
               <div class="dropdown-menu notification-ui_dd show" aria-labelledby="navbarDropdown">
                 <div class="notification-ui_dd-header">
@@ -93,7 +97,13 @@
       </div>
     </nav>
   </header>
+  <div class="container mt-5">
+    <div class="form-group w-50">
+      <label>Notification stream</label>
+      <input class="form-control" type=" text" placeholder="Stream name" [formControl]="streamName">
+      <input class="btn-success mt-2" type="submit" (click)="ChangeNotificationStream()" value="Connect">
+    </div>
 
 
-
+  </div>
 </body>
