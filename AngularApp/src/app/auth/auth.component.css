@@ -1,0 +1,7 @@
+.googleSignIn:hover {
+  content: url("../../assets/images/googleLogin/btn_google_signin_dark_focus_web.png");
+}
+
+.googleSignIn:active {
+  content: url("../../assets/images/googleLogin/btn_google_signin_dark_pressed_web.png");
+}

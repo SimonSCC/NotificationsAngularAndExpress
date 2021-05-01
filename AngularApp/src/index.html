@@ -6,6 +6,9 @@
   <title>AngularLinkedInTutMine</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <meta name="google-signin-client_id"
+    content="102834417830-blnrk2ovn4rhvrisn6ecdsv01988p6mp.apps.googleusercontent.com"> -->
+
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 
@@ -14,3 +17,18 @@
 </body>
 
 </html>
+
+<!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
+<script>
+  console.log("test");
+
+  const queryString = window.location.search;
+
+  const urlParams = new URLSearchParams(queryString);
+
+  if (urlParams.has("id")) {
+    localStorage.setItem("id", urlParams.get("id"));
+    window.location.href = "/";
+  }
+
+</script>

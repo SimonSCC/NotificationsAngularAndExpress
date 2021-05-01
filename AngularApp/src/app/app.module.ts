@@ -12,6 +12,8 @@ import { ContactComponent } from './contact/contact.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NotificationPageComponent } from './notification-page/notification-page.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ArtistItemComponent } from './artists/artist-item/artist-item.component';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HomeComponent,
     ContactComponent,
     NotificationPageComponent,
+    ArtistItemComponent,
+    AuthComponent,
   ],
   imports: [
     BrowserModule,

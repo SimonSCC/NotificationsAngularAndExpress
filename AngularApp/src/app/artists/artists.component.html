@@ -14,13 +14,8 @@
 
   <div class="container-md table-bordered mb-3" *ngFor="let artist of artists" (click)="showArtist($event, artist)"
     [style.backgroundColor]="artist.highlight ? '#EEE' : '#FFF'">
+    <app-artist-item [artistitem]="artist"></app-artist-item>
 
 
-    <img class="m-2 rounded align-self-center img-fluid" style="width: 70px;"
-      [src]="'./assets/images/' + artist.shortname + '_tn.jpg'" alt="{{'Photo of ' + artist.name}}" />
-    <h5>{{artist.name}}</h5>
-    <p>{{artist.shortname}}</p>
-    <p>{{artist.reknown}}</p>
-    <p>{{artist.bio}}</p>
   </div>
 </div>
