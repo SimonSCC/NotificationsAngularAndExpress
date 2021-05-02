@@ -5,11 +5,12 @@ var NotificationObject = /** @class */ (function () {
     /**
      *
      */
-    function NotificationObject(from, notificationMessage, imgUrl) {
+    function NotificationObject(from, notificationMessage, imgUrl, recipient) {
         this.From = from;
         this.NotificationMessage = notificationMessage;
         this.ImgUrl = imgUrl;
         this.Date = new Date().toLocaleString();
+        this.Recipient = recipient;
     }
     return NotificationObject;
 }());

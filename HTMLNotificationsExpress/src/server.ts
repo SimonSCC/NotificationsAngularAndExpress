@@ -8,12 +8,19 @@ import cors from "cors";
 import { MongoDataAccess } from "./data/mongoDataAccess.js";
 import fetch from "node-fetch";
 import JWT from "jsonwebtoken";
+import { NotificationHandler } from "./services/NotificationHandler.js";
 
 // const querystring = require("querystring");
 // const https = require("https");
+
 let counter = 0;
 const db: { [key: number]: string } = {};
+// const conn = new MongoDataAccess("mongodb+srv://dbUser:dbUserPassword@cluster0.eouu4.mongodb.net/test");
+const app = express();
+const port = 3000;
+const _NotificationHandler = new NotificationHandler();
 
+//MiddleWare:
 const authMiddleware = (req: any, res: any, next: any) => {
   try {
     console.log("Executing middleware!");
@@ -80,25 +87,19 @@ const authMiddleware = (req: any, res: any, next: any) => {
   }
 };
 
-// const conn = new MongoDataAccess("mongodb+srv://dbUser:dbUserPassword@cluster0.eouu4.mongodb.net/test");
-
-const app = express();
-const port = 3000;
-var responses = new Array();
-
 app.use(
   cors({
     origin: "http://localhost:4200",
   })
 );
 
-//Executes middleware globally
-// app.use(authMiddleware);
-
 app.use(express.urlencoded()); //Parse URL-encoded bodies
 app.use(express.json());
 
 app.use(express.static(__dirname + "/public"));
+
+//Executes middleware globally
+// app.use(authMiddleware);
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
@@ -108,9 +109,6 @@ app.get("/AboutMe", (req, res) => {
   res.sendFile(__dirname + "/aboutme.html");
 });
 
-// app.get("/authSecond", (req, res) => {
-//   res.end("AuthSecondHere");
-// });
 app.post("/secretcontent", authMiddleware, (req, res) => {
   res.send("OKAAAWEY 1");
 });
@@ -186,104 +184,18 @@ app.get("/auth", (req, res) => {
 });
 
 app.get("/stream", (req, res) => {
-  responses.push(res);
-  res.setHeader("Content-Type", "text/event-stream");
-
-  InitiateStream(res);
+  _NotificationHandler.AddListener(req, res);
 });
 
 app.post("/sendNotification", (req, res) => {
-  console.log("PostRequest received");
-  console.log(req.body.From);
-
-  let recipient: string = req.body.Recipient;
-  let from: string = req.body.From;
-  let message: string = req.body.Message;
-  let imgurl: string = req.body.ImgUrl;
-
-  if (req.body.From == null) from = "NoSender";
-
-  if (req.body.Message == null) message = "NoMessage";
-  if (req.body.ImgUrl == null) imgurl = "";
-
-  console.log("\nRetrieved post request " + "To: " + recipient + " " + from + " " + message + " " + imgurl + "\n");
-
-  let notification: NotificationObject = new NotificationObject(from, message, imgurl);
-
-  res.setHeader("Content-Type", "text/event-stream");
-
-  if (recipient == "" || recipient == undefined) {
-    SendNotification(notification);
-  } else {
-    SendNotificationToSpecificStream(notification, recipient);
-  }
-
-  res.send(`You've succesfully sent your notification: ${from}, ${message}, ${imgurl}`);
+  _NotificationHandler.SendNotification(_NotificationHandler.CreateNotification(req), res);
 });
 
 // start the Express server
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
-  setTimeout(() => CurrentActiveStreams(), 5000);
 });
-
-function InitiateStream(res: any) {
-  let notification: NotificationObject = new NotificationObject("Welcome", "You've succesfully connected to the stream!", "");
-  console.log("Created notification\n" + notification.From, notification.NotificationMessage);
-  // res.write("event: ping\n");
-
-  // res.write("event: Notification\n")
-  res.write("data: " + JSON.stringify(notification));
-  res.write("\n\n");
-  // res.write("data: " + "Title:Notification; Message: You've succesfully connected to the stream!\n\n"); //This is one event
-  // setTimeout(() => InitiateStream(res), 5000);
-}
-
-function SendNotification(notification: NotificationObject) {
-  // conn.insertMany([notification], "notifications");
-
-  responses.forEach((res) => {
-    res.write("data: " + JSON.stringify(notification));
-    res.write("\n\n");
-  });
-
-  console.log(responses.length);
-
-  //Might result in multiple open resopnses
-}
-
-function CurrentActiveStreams() {
-  console.log("Current active streams: " + responses.length);
-  // conn.findDocument("notifications");
-
-  // responses.forEach(res => {
-  //     console.log(res);
-  // });
-  setTimeout(() => CurrentActiveStreams(), 10000);
-}
-
-//Attempt:
-
-let userResponses: any = [];
 
 app.get("/stream/:user", (req, res) => {
-  // res.write.User = userSimon;
-  userResponses.push({ StreamName: req.params.user, response: res });
-
-  res.setHeader("Content-Type", "text/event-stream");
-
-  InitiateStream(res);
+  _NotificationHandler.AddListener(req, res);
 });
-
-function SendNotificationToSpecificStream(notification: NotificationObject, streamName: string) {
-  console.log("SendNotiToSpecific" + streamName);
-  userResponses.forEach((object: any) => {
-    // console.log(userResponses);
-    // console.log(res.body.User);
-    // console.log(streamName);
-    if (object.StreamName == streamName) {
-      object.response.write("data: " + JSON.stringify(notification));
-      object.response.write("\n\n");
-    }
-  });
-}
